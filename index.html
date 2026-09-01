@@ -27,6 +27,7 @@
     .profile-mini { display: flex; align-items: center; gap: 0.6rem; background: #f0f0f0; padding: 0.3rem 1rem 0.3rem 0.8rem; border-radius: 40px; cursor: pointer; }
     .profile-mini img { width: 32px; height: 32px; border-radius: 50%; background: #d0d0d0; object-fit: cover; }
     .profile-mini span { font-size: 0.9rem; font-weight: 450; }
+    .top-paw-btn { background: #f0f0f0; border: none; border-radius: 30px; padding: 0.1rem 0.6rem; font-size: 1.2rem; cursor: pointer; line-height: 1.6; }
     .timer-section { background: #f3f3f3; border-radius: 2.5rem; padding: 2rem 1.8rem; margin-bottom: 2.2rem; text-align: center; }
     .timer-display { font-size: 4.2rem; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; margin-bottom: 0.5rem; color: #111; }
     .timer-controls { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; margin: 0.8rem 0 0.6rem; }
@@ -59,7 +60,7 @@
     .plan-header > span { font-weight: 500; font-size: 1.1rem; }
     .plan-date-nav { display: flex; align-items: center; gap: 0.6rem; }
     .plan-date-nav button { background: #f0f0f0; border: 1px solid #ddd; border-radius: 40px; padding: 0.2rem 0.8rem; font-size: 1rem; cursor: pointer; }
-    .plan-date-nav .date-label { font-size: 0.9rem; font-weight: 450; min-width: 100px; text-align: center; cursor: pointer; }
+    .plan-date-nav .date-label { font-size: 0.9rem; font-weight: 450; min-width: 100px; text-align: center; cursor: pointer; user-select: none; }
     .plan-date-nav .today-btn { background: #1e1e1e; color: white; border: none; padding: 0.2rem 1rem; font-size: 0.75rem; cursor: pointer; }
     .plan-list { list-style: none; margin-top: 0.6rem; }
     .plan-list li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #efefef; }
@@ -76,8 +77,8 @@
     .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: #ccc; background-size: cover; background-position: center; flex-shrink: 0; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.04); cursor: pointer; }
     .profile-info { flex: 1; min-width: 120px; }
     .profile-info .name-row { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; font-size: 1.3rem; font-weight: 500; }
-    .profile-info .name-row input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 1.3rem; font-weight: 500; outline: none; width: 100px; padding: 0; }
-    .profile-info .name-row .ip-input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; font-weight: 400; outline: none; width: 60px; padding: 0; color: #666; }
+    .profile-info .name-row input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 1.3rem; font-weight: 500; outline: none; width: 60px; padding: 0; }
+    .profile-info .name-row .ip-input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; font-weight: 400; outline: none; width: 50px; padding: 0; color: #666; }
     .profile-info .name-row .hash { font-size: 0.9rem; color: #888; font-weight: 300; }
     .profile-info .bio-line { font-size: 0.9rem; color: #444; margin-top: 0.2rem; cursor: pointer; }
     .profile-info .bio-line input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; outline: none; width: 140px; color: #444; padding: 0; }
@@ -85,7 +86,7 @@
     .profile-stats { display: flex; gap: 2rem; }
     .profile-stats div { font-size: 0.9rem; }
     .profile-stats strong { font-weight: 600; }
-    .profile-paw { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0 0.2rem; flex-shrink: 0; align-self: flex-start; margin-top: 0.2rem; }
+    .profile-save-btn { background: #f0f0f0; border: none; padding: 0.3rem 1.2rem; border-radius: 40px; font-size: 0.8rem; cursor: pointer; color: #333; margin-top: 0.2rem; }
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 200; justify-content: center; align-items: center; }
     .modal-overlay.active { display: flex; }
     .modal-box { background: #ffffff; border-radius: 1.5rem; padding: 2rem 2rem 1.2rem; width: 280px; max-width: 85%; box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
@@ -117,11 +118,11 @@
 </head>
 <body>
 <div class="app" id="app">
+  <!-- 顶部导航栏 -->
   <div class="top-bar">
     <div class="logo">⚡ focus<span>·me</span></div>
-    <div class="profile-mini" id="profileMini">
-      <img id="miniAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23d0d0d0'/%3E%3Ctext x='8' y='26' font-size='18' fill='%23555'%3E👤%3C/text%3E%3C/svg%3E" alt="avatar">
-      <span id="miniName">我</span>
+    <div id="topRightContainer">
+      <!-- 由 JS 动态控制 -->
     </div>
   </div>
 
@@ -187,10 +188,10 @@
             <input type="text" id="profileNameInput" placeholder="昵称" value="我" style="width:60px;">
             <span class="hash">#</span>
             <input type="text" id="profileIpInput" placeholder="IP" value="上海" class="ip-input" style="width:50px;">
-            <button class="profile-paw" id="pawBtn">🐾</button>
           </div>
           <div class="bio-line" id="bioDisplay">极简 · 专注</div>
           <input type="text" id="bioInput" style="display:none; border:none; border-bottom:1px solid #ccc; background:transparent; font-size:0.9rem; outline:none; width:140px; color:#444; padding:0; margin-top:0.2rem;">
+          <button class="profile-save-btn" id="profileSaveBtn">保存</button>
         </div>
       </div>
       <hr class="profile-divider">
@@ -412,23 +413,22 @@
     if (e.target === this) closeCalendar();
   });
 
-  // 长按"今天"弹出日历
-  var longPressTimer = null;
+  // 双击"今天"弹出日历
+  var clickCount = 0;
+  var clickTimer = null;
   var dateLabel = document.getElementById('planDateLabel');
-  dateLabel.addEventListener('mousedown', function() {
-    longPressTimer = setTimeout(function() {
+  dateLabel.addEventListener('click', function(e) {
+    clickCount++;
+    if (clickCount === 1) {
+      clickTimer = setTimeout(function() {
+        clickCount = 0;
+      }, 400);
+    } else if (clickCount === 2) {
+      clearTimeout(clickTimer);
+      clickCount = 0;
       openCalendar();
-    }, 800);
+    }
   });
-  dateLabel.addEventListener('mouseup', function() { clearTimeout(longPressTimer); });
-  dateLabel.addEventListener('mouseleave', function() { clearTimeout(longPressTimer); });
-  dateLabel.addEventListener('touchstart', function(e) {
-    longPressTimer = setTimeout(function() {
-      openCalendar();
-    }, 800);
-  });
-  dateLabel.addEventListener('touchend', function() { clearTimeout(longPressTimer); });
-  dateLabel.addEventListener('touchmove', function() { clearTimeout(longPressTimer); });
 
   document.getElementById('planPrevBtn').addEventListener('click', function() {
     var d = new Date(planViewDate + 'T00:00:00');
@@ -528,15 +528,33 @@
     });
   }
 
+  // ========== 右上角动态切换 ==========
+  function updateTopRight() {
+    var container = document.getElementById('topRightContainer');
+    var currentSection = document.querySelector('.section:not(.hidden)');
+    var isProfile = currentSection && currentSection.id === 'sectionProfile';
+
+    if (isProfile) {
+      // “我的”页面：显示 🐾
+      container.innerHTML = '<button class="top-paw-btn" id="topPawBtn">🐾</button>';
+      document.getElementById('topPawBtn').addEventListener('click', function() {
+        document.getElementById('modalOverlay').classList.add('active');
+      });
+    } else {
+      // 其他页面：显示头像 + “我”
+      var avatarImg = store.profile.avatar || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"%3E%3Crect width="40" height="40" fill="%23d0d0d0"/%3E%3Ctext x="8" y="26" font-size="18" fill="%23555"%3E👤%3C/text%3E%3C/svg%3E';
+      var name = store.profile.name || '我';
+      container.innerHTML = '<div class="profile-mini" id="profileMini"><img id="miniAvatar" src="' + avatarImg + '" alt="avatar"><span id="miniName">' + name + '</span></div>';
+      document.getElementById('profileMini').addEventListener('click', function() {
+        switchSection('sectionProfile');
+      });
+    }
+  }
+
   function refreshUI() {
     renderStats();
     renderTweets();
     renderPlans();
-    document.getElementById('miniName').textContent = store.profile.name || '我';
-    if (store.profile.avatar) {
-      document.getElementById('miniAvatar').src = store.profile.avatar;
-      document.getElementById('profileAvatar').style.backgroundImage = 'url(' + store.profile.avatar + ')';
-    }
     document.getElementById('profileNameInput').value = store.profile.name || '';
     document.getElementById('profileIpInput').value = store.profile.ip || '';
     var bioDisplay = document.getElementById('bioDisplay');
@@ -544,8 +562,15 @@
     bioDisplay.textContent = store.profile.bio || '极简 · 专注';
     bioDisplay.style.display = 'block';
     bioInput.style.display = 'none';
+    // 更新大号头像
+    if (store.profile.avatar) {
+      document.getElementById('profileAvatar').style.backgroundImage = 'url(' + store.profile.avatar + ')';
+    }
+    // 更新右上角（缩略图也会同步更新）
+    updateTopRight();
   }
 
+  // ========== 页面切换 ==========
   var navBtns = document.querySelectorAll('.bottom-nav button');
   var sections = {
     sectionHome: document.getElementById('sectionHome'),
@@ -560,6 +585,7 @@
       b.classList.remove('active');
       if (b.dataset.section === id) b.classList.add('active');
     });
+    updateTopRight();
   }
   navBtns.forEach(function(b) {
     b.addEventListener('click', function() {
@@ -621,17 +647,14 @@
     }
   });
 
-  // 自动保存个人资料
-  function autoSaveProfile() {
+  // 保存个人资料（手动保存）
+  document.getElementById('profileSaveBtn').addEventListener('click', function() {
     store.profile.name = document.getElementById('profileNameInput').value.trim() || '我';
     store.profile.ip = document.getElementById('profileIpInput').value.trim() || '上海';
     saveStore();
     refreshUI();
-  }
-  document.getElementById('profileNameInput').addEventListener('blur', autoSaveProfile);
-  document.getElementById('profileIpInput').addEventListener('blur', autoSaveProfile);
-  document.getElementById('profileNameInput').addEventListener('change', autoSaveProfile);
-  document.getElementById('profileIpInput').addEventListener('change', autoSaveProfile);
+    alert('✅ 已保存');
+  });
 
   // 长按"极简 · 专注"编辑
   var bioDisplay = document.getElementById('bioDisplay');
@@ -670,7 +693,7 @@
     if (e.key === 'Enter') { this.blur(); }
   });
 
-  // 头像自动保存
+  // ========== 头像上传（大图 + 缩略图同步） ==========
   document.getElementById('profileAvatar').addEventListener('click', function() {
     var input = document.createElement('input');
     input.type = 'file';
@@ -682,7 +705,8 @@
         reader.onload = function(ev) {
           store.profile.avatar = ev.target.result;
           saveStore();
-          refreshUI();
+          refreshUI();  // 刷新大图 + 右上角缩略图
+          updateTopRight(); // 二次确保
         };
         reader.readAsDataURL(file);
       }
@@ -690,10 +714,7 @@
     input.click();
   });
 
-  // 🐾 点击弹出导出/导入
-  document.getElementById('pawBtn').addEventListener('click', function() {
-    document.getElementById('modalOverlay').classList.add('active');
-  });
+  // 弹窗控制
   document.getElementById('modalCancel').addEventListener('click', function() {
     document.getElementById('modalOverlay').classList.remove('active');
   });
@@ -747,10 +768,6 @@
     };
     reader.readAsText(file);
     this.value = '';
-  });
-
-  document.getElementById('profileMini').addEventListener('click', function() {
-    switchSection('sectionProfile');
   });
 
   refreshUI();
