@@ -91,13 +91,13 @@
     .mood-page .mood-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.6rem; font-weight: 600; color: #999; letter-spacing: 0.3px; margin-bottom: 0.2rem; padding: 0 0.1rem; }
     .mood-page .mood-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.15rem; }
     .mood-page .mood-grid .mood-cell { display: flex; flex-direction: column; align-items: center; padding: 0.1rem 0.1rem; justify-content: flex-start; background: transparent; }
-    .mood-page .mood-grid .mood-cell .mood-dot { width: 34px; height: 34px; border-radius: 50%; border: 1.2px solid #e8e8e8; margin-bottom: 0.05rem; transition: 0.15s; flex-shrink: 0; background-color: #d0d0d0; }
+    .mood-page .mood-grid .mood-cell .mood-dot { width: 34px; height: 34px; border-radius: 50%; border: 1.2px solid #d0d0d0; margin-bottom: 0.05rem; transition: 0.15s; flex-shrink: 0; background-color: #d0d0d0; }
     .mood-page .mood-grid .mood-cell .mood-date { font-size: 0.55rem; font-weight: 500; color: #333; line-height: 1; }
     .mood-page .mood-grid .mood-cell .mood-date.today { font-weight: 700; color: #1e1e1e; }
     .mood-page .mood-grid .mood-cell.other-month .mood-date { color: #ccc; }
     .mood-page .mood-grid .mood-cell.other-month .mood-dot { opacity: 0.3; }
     .mood-page .mood-grid .mood-cell.disabled { opacity: 0.5; cursor: default; }
-    /* 右下角交互点 - 颜色加深 + 范围扩大 */
+    /* 右下角交互点 */
     .mood-page .border-toggle { position: absolute; bottom: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: transparent; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; z-index: 5; opacity: 0.6; transition: opacity 0.2s; }
     .mood-page .border-toggle:active { opacity: 1; }
     /* ===== 颜色选择弹窗（极小版） ===== */
@@ -370,7 +370,6 @@
           <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
         </div>
         <div class="mood-grid" id="moodGrid"></div>
-        <!-- 右下角交互点 -->
         <div class="border-toggle" id="borderToggle"></div>
       </div>
     </div>
@@ -481,7 +480,7 @@
     chartMode: 'arc',
     moodColors: {},
     presetColors: ['#d0d0d0', '#FF6B6B', '#4ECDC4', '#FFE66D'],
-    borderColor: '#333'
+    borderColor: '#000000'
   };
 
   function loadStore() {
@@ -503,7 +502,7 @@
         if (!store.presetColors || store.presetColors.length === 0) {
           store.presetColors = ['#d0d0d0', '#FF6B6B', '#4ECDC4', '#FFE66D'];
         }
-        if (!store.borderColor) store.borderColor = '#333';
+        if (!store.borderColor) store.borderColor = '#000000';
       }
     } catch(e) {}
   }
@@ -844,8 +843,6 @@
   var moodYear, moodMonth;
   var moodPage = document.getElementById('moodPage');
   var isMoodOpen = false;
-  var borderColorIndex = 0;
-  var borderColors = ['#333', '#1e1e1e'];
 
   function initMood() {
     var now = new Date();
@@ -932,7 +929,7 @@
 
   function toggleBorderColor() {
     var current = store.borderColor;
-    var next = (current === '#333') ? '#1e1e1e' : '#333';
+    var next = (current === '#000000') ? '#d0d0d0' : '#000000';
     store.borderColor = next;
     saveStore();
     updateBorderColor();
