@@ -84,12 +84,12 @@
     .mood-page .mood-header .mood-back { background: none; border: none; font-size: 1rem; cursor: pointer; color: #333; display: flex; align-items: center; gap: 0.2rem; }
     .mood-page .mood-header .mood-back span { font-size: 1.2rem; }
     .mood-page .mood-header h2 { font-size: 1rem; font-weight: 700; letter-spacing: 1px; color: #1e1e1e; }
-    .mood-page .mood-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-    .mood-page .mood-nav button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; padding: 0.2rem 0.6rem; }
+    /* 整个卡片包含月份+星期+日期 */
+    .mood-page .mood-card { background: #ffffff; border-radius: 1.2rem; padding: 0.6rem 0.4rem 0.4rem 0.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-top: 0.1rem; position: relative; }
+    .mood-page .mood-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem; padding: 0 0.1rem; }
+    .mood-page .mood-nav button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; padding: 0.1rem 0.4rem; }
     .mood-page .mood-nav .mood-month { font-size: 0.95rem; font-weight: 700; color: #1e1e1e; }
-    .mood-page .mood-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.6rem; font-weight: 600; color: #999; letter-spacing: 0.3px; margin-bottom: 0.3rem; padding: 0 0.1rem; }
-    /* ===== 整个日历卡片（统一圆角白底+加深阴影） ===== */
-    .mood-page .mood-card { background: #ffffff; border-radius: 1.2rem; padding: 0.8rem 0.4rem 0.6rem 0.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-top: 0.1rem; }
+    .mood-page .mood-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.6rem; font-weight: 600; color: #999; letter-spacing: 0.3px; margin-bottom: 0.2rem; padding: 0 0.1rem; }
     .mood-page .mood-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.15rem; }
     .mood-page .mood-grid .mood-cell { display: flex; flex-direction: column; align-items: center; padding: 0.1rem 0.1rem; justify-content: flex-start; background: transparent; }
     .mood-page .mood-grid .mood-cell .mood-dot { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #e8e8e8; margin-bottom: 0.05rem; transition: 0.15s; flex-shrink: 0; background-color: #d0d0d0; }
@@ -98,6 +98,9 @@
     .mood-page .mood-grid .mood-cell.other-month .mood-date { color: #ccc; }
     .mood-page .mood-grid .mood-cell.other-month .mood-dot { opacity: 0.3; }
     .mood-page .mood-grid .mood-cell.disabled { opacity: 0.5; cursor: default; }
+    /* 右下角隐形交互点 */
+    .mood-page .border-toggle { position: absolute; bottom: 6px; right: 6px; width: 12px; height: 12px; border-radius: 50%; background: transparent; border: 1px solid rgba(0,0,0,0.06); cursor: pointer; z-index: 5; opacity: 0.3; transition: opacity 0.2s; }
+    .mood-page .border-toggle:active { opacity: 0.8; }
     /* ===== 颜色选择弹窗（极小版） ===== */
     .color-picker-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); z-index: 300; justify-content: center; align-items: center; }
     .color-picker-overlay.active { display: flex; }
@@ -357,17 +360,20 @@
         <h2>CALENDAR</h2>
         <div style="width:40px;"></div>
       </div>
-      <div class="mood-nav">
-        <button id="moodPrevMonth">‹</button>
-        <span class="mood-month" id="moodMonthLabel"></span>
-        <button id="moodNextMonth">›</button>
-      </div>
-      <div class="mood-weekdays">
-        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-      </div>
-      <!-- 整个日历卡片 -->
+
+      <!-- 整个卡片：包含月份+星期+日期 -->
       <div class="mood-card">
+        <div class="mood-nav">
+          <button id="moodPrevMonth">‹</button>
+          <span class="mood-month" id="moodMonthLabel"></span>
+          <button id="moodNextMonth">›</button>
+        </div>
+        <div class="mood-weekdays">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
         <div class="mood-grid" id="moodGrid"></div>
+        <!-- 右下角隐形交互点（边框颜色切换） -->
+        <div class="border-toggle" id="borderToggle"></div>
       </div>
     </div>
   </div>
@@ -476,7 +482,8 @@
     layoutMode: 'a',
     chartMode: 'arc',
     moodColors: {},
-    presetColors: ['#d0d0d0', '#FF6B6B', '#4ECDC4', '#FFE66D']
+    presetColors: ['#d0d0d0', '#FF6B6B', '#4ECDC4', '#FFE66D'],
+    borderColor: '#333'
   };
 
   function loadStore() {
@@ -498,6 +505,7 @@
         if (!store.presetColors || store.presetColors.length === 0) {
           store.presetColors = ['#d0d0d0', '#FF6B6B', '#4ECDC4', '#FFE66D'];
         }
+        if (!store.borderColor) store.borderColor = '#333';
       }
     } catch(e) {}
   }
@@ -838,12 +846,15 @@
   var moodYear, moodMonth;
   var moodPage = document.getElementById('moodPage');
   var isMoodOpen = false;
+  var borderColorIndex = 0;
+  var borderColors = ['#333', '#1e1e1e'];
 
   function initMood() {
     var now = new Date();
     moodYear = now.getFullYear();
     moodMonth = now.getMonth();
     renderMood();
+    updateBorderColor();
   }
 
   function getMonthAbbr(monthIndex) {
@@ -857,64 +868,85 @@
     var label = document.getElementById('moodMonthLabel');
     label.textContent = getMonthAbbr(moodMonth) + ' ' + moodYear;
 
-    var firstDay = new Date(moodYear, moodMonth, 1).getDay();
-    var daysInMonth = new Date(moodYear, moodMonth + 1, 0).getDate();
+    // ✅ 使用 UTC 获取第一天星期（避免时区偏移）
+    var firstDay = new Date(Date.UTC(moodYear, moodMonth, 1)).getUTCDay();
+    var daysInMonth = new Date(Date.UTC(moodYear, moodMonth + 1, 0)).getUTCDate();
     var todayStr = getToday();
+
+    // ✅ 周一作为第一天：firstDay=1(周一) => 0偏移，firstDay=0(周日) => 6偏移
+    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
     var totalCells = 42;
     var cells = [];
 
-    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
-
-    // 只显示当月日期
-    for (var d = 1; d <= daysInMonth; d++) {
-      var dateStr = moodYear + '-' + String(moodMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-      cells.push({ day: d, dateStr: dateStr, isOther: false });
+    // 先填占位，再放日期
+    for (var i = 0; i < totalCells; i++) {
+      cells.push(null);
     }
 
-    // 补齐空白（只用于占位，不显示）
-    while (cells.length < totalCells) {
-      cells.push({ day: '', dateStr: '', isOther: true, isPlaceholder: true });
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dateStr = moodYear + '-' + String(moodMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      cells[startOffset + d - 1] = { day: d, dateStr: dateStr, isOther: false };
     }
 
     cells.forEach(function(cell, index) {
       var div = document.createElement('div');
       div.className = 'mood-cell';
-      if (cell.isOther) {
-        div.classList.add('other-month');
-      }
 
       var dot = document.createElement('div');
       dot.className = 'mood-dot';
-      if (cell.isPlaceholder) {
+      if (!cell) {
         dot.style.opacity = '0';
         dot.style.border = 'none';
       } else {
         var color = store.moodColors[cell.dateStr] || '#d0d0d0';
         dot.style.backgroundColor = color;
-        dot.style.border = '2px solid #e8e8e8';
+        dot.style.border = '2px solid ' + store.borderColor;
       }
       div.appendChild(dot);
 
       var dateSpan = document.createElement('div');
       dateSpan.className = 'mood-date';
-      dateSpan.textContent = cell.day || '';
-      if (cell.dateStr === todayStr) dateSpan.classList.add('today');
+      dateSpan.textContent = cell ? cell.day || '' : '';
+      if (cell && cell.dateStr === todayStr) dateSpan.classList.add('today');
       div.appendChild(dateSpan);
 
-      // 只有当天可点击
-      if (!cell.isOther && !cell.isPlaceholder && cell.dateStr === todayStr) {
+      if (cell && !cell.isOther && cell.dateStr === todayStr) {
         div.addEventListener('click', function() {
           openColorPicker(cell.dateStr);
         });
         div.style.cursor = 'pointer';
-      } else if (!cell.isOther && !cell.isPlaceholder) {
+      } else if (cell) {
         div.classList.add('disabled');
+      } else {
+        div.classList.add('other-month');
       }
 
       grid.appendChild(div);
     });
   }
+
+  function updateBorderColor() {
+    var dots = document.querySelectorAll('.mood-dot');
+    dots.forEach(function(dot) {
+      if (dot.style.border !== 'none') {
+        dot.style.border = '2px solid ' + store.borderColor;
+      }
+    });
+  }
+
+  function toggleBorderColor() {
+    var current = store.borderColor;
+    var next = (current === '#333') ? '#1e1e1e' : '#333';
+    store.borderColor = next;
+    saveStore();
+    updateBorderColor();
+  }
+
+  document.getElementById('borderToggle').addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleBorderColor();
+  });
 
   function openMood() {
     isMoodOpen = true;
