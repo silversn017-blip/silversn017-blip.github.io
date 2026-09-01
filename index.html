@@ -78,7 +78,7 @@
     .legend-list li .type-percent { color: #999; flex: 0 0 auto; min-width: 40px; text-align: right; }
     .stats-page .stats-content .no-data { text-align: center; color: #ccc; font-size: 1.2rem; padding: 2rem 0; letter-spacing: 1px; }
     /* ===== 心情日历（独立推入页） ===== */
-    .mood-page { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #ffffff; border-radius: 2rem; padding: 1.8rem 1.5rem 2rem; z-index: 15; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); overflow-y: auto; box-shadow: -4px 0 24px rgba(0,0,0,0.04); }
+    .mood-page { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #ffffff; border-radius: 2rem; padding: 1.8rem 1.5rem 2rem; z-index: 15; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); overflow-y: auto; }
     .mood-page.open { transform: translateX(0); }
     .mood-page .mood-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
     .mood-page .mood-header .mood-back { background: none; border: none; font-size: 1rem; cursor: pointer; color: #333; display: flex; align-items: center; gap: 0.2rem; }
@@ -88,8 +88,10 @@
     .mood-page .mood-nav button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; padding: 0.2rem 0.6rem; }
     .mood-page .mood-nav .mood-month { font-size: 0.95rem; font-weight: 700; color: #1e1e1e; }
     .mood-page .mood-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.6rem; font-weight: 600; color: #999; letter-spacing: 0.3px; margin-bottom: 0.1rem; padding: 0 0.1rem; }
-    .mood-page .mood-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.15rem; margin-top: 0.05rem; }
-    .mood-page .mood-grid .mood-cell { display: flex; flex-direction: column; align-items: center; padding: 0.3rem 0.1rem; border-radius: 10px; background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.04); aspect-ratio: 1 / 1; justify-content: center; }
+    /* ===== 整个日历卡片（统一圆角白底+阴影） ===== */
+    .mood-page .mood-card { background: #ffffff; border-radius: 1.2rem; padding: 0.6rem 0.4rem 0.4rem 0.4rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-top: 0.1rem; }
+    .mood-page .mood-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.15rem; }
+    .mood-page .mood-grid .mood-cell { display: flex; flex-direction: column; align-items: center; padding: 0.2rem 0.1rem; justify-content: flex-start; background: transparent; }
     .mood-page .mood-grid .mood-cell .mood-dot { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #f0f0f0; margin-bottom: 0.1rem; transition: 0.15s; flex-shrink: 0; }
     .mood-page .mood-grid .mood-cell .mood-date { font-size: 0.6rem; font-weight: 500; color: #333; line-height: 1; }
     .mood-page .mood-grid .mood-cell .mood-date.today { font-weight: 700; color: #1e1e1e; }
@@ -362,7 +364,10 @@
       <div class="mood-weekdays">
         <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
       </div>
-      <div class="mood-grid" id="moodGrid"></div>
+      <!-- 整个日历卡片 -->
+      <div class="mood-card">
+        <div class="mood-grid" id="moodGrid"></div>
+      </div>
     </div>
   </div>
 
