@@ -82,7 +82,16 @@
     .profile-info .name-row .hash { font-size: 0.9rem; color: #888; font-weight: 300; }
     .profile-info .bio-line { font-size: 0.9rem; color: #444; margin-top: 0.2rem; cursor: pointer; }
     .profile-info .bio-line input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; outline: none; width: 140px; color: #444; padding: 0; }
-    .profile-divider { border: none; border-top: 1px solid #e0e0e0; margin: 0.8rem 0; }
+    /* ===== 横线彻底修复：强制平直，无圆角 ===== */
+    .profile-divider {
+      border: none;
+      height: 1px;
+      background: #e0e0e0;
+      margin: 0.8rem 0;
+      width: 100%;
+      flex-shrink: 0;
+      border-radius: 0 !important;
+    }
     .profile-stats { display: flex; gap: 2rem; }
     .profile-stats div { font-size: 0.9rem; }
     .profile-stats strong { font-weight: 600; }
@@ -194,6 +203,7 @@
           <button class="profile-save-btn" id="profileSaveBtn">保存</button>
         </div>
       </div>
+      <!-- 横线已修复：平直无圆角 -->
       <hr class="profile-divider">
       <div class="profile-stats">
         <div><strong id="profileTotal">0</strong> 总专注(h)</div>
@@ -535,13 +545,11 @@
     var isProfile = currentSection && currentSection.id === 'sectionProfile';
 
     if (isProfile) {
-      // “我的”页面：显示 🐾
       container.innerHTML = '<button class="top-paw-btn" id="topPawBtn">🐾</button>';
       document.getElementById('topPawBtn').addEventListener('click', function() {
         document.getElementById('modalOverlay').classList.add('active');
       });
     } else {
-      // 其他页面：显示头像 + “我”
       var avatarImg = store.profile.avatar || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"%3E%3Crect width="40" height="40" fill="%23d0d0d0"/%3E%3Ctext x="8" y="26" font-size="18" fill="%23555"%3E👤%3C/text%3E%3C/svg%3E';
       var name = store.profile.name || '我';
       container.innerHTML = '<div class="profile-mini" id="profileMini"><img id="miniAvatar" src="' + avatarImg + '" alt="avatar"><span id="miniName">' + name + '</span></div>';
@@ -562,11 +570,9 @@
     bioDisplay.textContent = store.profile.bio || '极简 · 专注';
     bioDisplay.style.display = 'block';
     bioInput.style.display = 'none';
-    // 更新大号头像
     if (store.profile.avatar) {
       document.getElementById('profileAvatar').style.backgroundImage = 'url(' + store.profile.avatar + ')';
     }
-    // 更新右上角（缩略图也会同步更新）
     updateTopRight();
   }
 
@@ -647,7 +653,7 @@
     }
   });
 
-  // 保存个人资料（手动保存）
+  // 保存个人资料
   document.getElementById('profileSaveBtn').addEventListener('click', function() {
     store.profile.name = document.getElementById('profileNameInput').value.trim() || '我';
     store.profile.ip = document.getElementById('profileIpInput').value.trim() || '上海';
@@ -693,7 +699,7 @@
     if (e.key === 'Enter') { this.blur(); }
   });
 
-  // ========== 头像上传（大图 + 缩略图同步） ==========
+  // 头像上传
   document.getElementById('profileAvatar').addEventListener('click', function() {
     var input = document.createElement('input');
     input.type = 'file';
@@ -705,8 +711,7 @@
         reader.onload = function(ev) {
           store.profile.avatar = ev.target.result;
           saveStore();
-          refreshUI();  // 刷新大图 + 右上角缩略图
-          updateTopRight(); // 二次确保
+          refreshUI();
         };
         reader.readAsDataURL(file);
       }
