@@ -59,8 +59,8 @@
     .plan-header > span { font-weight: 500; font-size: 1.1rem; }
     .plan-date-nav { display: flex; align-items: center; gap: 0.6rem; }
     .plan-date-nav button { background: #f0f0f0; border: 1px solid #ddd; border-radius: 40px; padding: 0.2rem 0.8rem; font-size: 1rem; cursor: pointer; }
-    .plan-date-nav .date-label { font-size: 0.9rem; font-weight: 450; min-width: 100px; text-align: center; }
-    .plan-date-nav .today-btn { background: #1e1e1e; color: white; border: none; padding: 0.2rem 1rem; font-size: 0.75rem; }
+    .plan-date-nav .date-label { font-size: 0.9rem; font-weight: 450; min-width: 100px; text-align: center; cursor: pointer; }
+    .plan-date-nav .today-btn { background: #1e1e1e; color: white; border: none; padding: 0.2rem 1rem; font-size: 0.75rem; cursor: pointer; }
     .plan-list { list-style: none; margin-top: 0.6rem; }
     .plan-list li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #efefef; }
     .plan-list li input[type="checkbox"] { width: 18px; height: 18px; accent-color: #1e1e1e; }
@@ -75,19 +75,40 @@
     .profile-header { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
     .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: #ccc; background-size: cover; background-position: center; flex-shrink: 0; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.04); cursor: pointer; }
     .profile-info { flex: 1; min-width: 120px; }
-    .profile-info .name { font-size: 1.3rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .profile-info .name input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 1.3rem; font-weight: 500; outline: none; width: 120px; }
-    .profile-info .bio { font-size: 0.9rem; color: #444; margin-top: 0.2rem; }
-    .profile-info .bio input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; outline: none; width: 140px; color: #444; }
-    .profile-edit-btn { background: #1e1e1e; color: white; border: none; padding: 0.3rem 1.2rem; border-radius: 60px; font-size: 0.8rem; cursor: pointer; flex-shrink: 0; }
-    .profile-stats { display: flex; gap: 2rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; }
+    .profile-info .name-row { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; font-size: 1.3rem; font-weight: 500; }
+    .profile-info .name-row input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 1.3rem; font-weight: 500; outline: none; width: 100px; padding: 0; }
+    .profile-info .name-row .ip-input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; font-weight: 400; outline: none; width: 60px; padding: 0; color: #666; }
+    .profile-info .name-row .hash { font-size: 0.9rem; color: #888; font-weight: 300; }
+    .profile-info .bio-line { font-size: 0.9rem; color: #444; margin-top: 0.2rem; cursor: pointer; }
+    .profile-info .bio-line input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; outline: none; width: 140px; color: #444; padding: 0; }
+    .profile-divider { border: none; border-top: 1px solid #e0e0e0; margin: 0.8rem 0; }
+    .profile-stats { display: flex; gap: 2rem; }
     .profile-stats div { font-size: 0.9rem; }
     .profile-stats strong { font-weight: 600; }
+    .profile-paw { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0 0.2rem; flex-shrink: 0; align-self: flex-start; margin-top: 0.2rem; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 200; justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: #ffffff; border-radius: 1.5rem; padding: 2rem 2rem 1.2rem; width: 280px; max-width: 85%; box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+    .modal-box .modal-btn { display: block; width: 100%; padding: 0.7rem 0; border: none; border-radius: 40px; font-size: 1rem; font-weight: 450; cursor: pointer; margin-bottom: 0.6rem; background: #1e1e1e; color: white; }
+    .modal-box .modal-cancel { display: block; width: 100%; padding: 0.5rem 0; border: none; background: transparent; color: #999; font-size: 0.95rem; cursor: pointer; margin-top: 0.2rem; }
+    .modal-box .modal-btn:last-of-type { margin-bottom: 0.4rem; }
+    .calendar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 200; justify-content: center; align-items: center; }
+    .calendar-overlay.active { display: flex; }
+    .calendar-box { background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; width: 320px; max-width: 90%; box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+    .calendar-box .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .calendar-box .cal-header button { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.2rem 0.6rem; }
+    .calendar-box .cal-header .cal-title { font-size: 1rem; font-weight: 500; }
+    .calendar-box .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.7rem; color: #999; margin-bottom: 0.3rem; }
+    .calendar-box .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 0.2rem; }
+    .calendar-box .cal-days button { background: none; border: none; padding: 0.4rem 0; font-size: 0.9rem; cursor: pointer; border-radius: 30px; }
+    .calendar-box .cal-days button:hover { background: #f0f0f0; }
+    .calendar-box .cal-days button.selected { background: #1e1e1e; color: white; }
+    .calendar-box .cal-days button.other-month { color: #ccc; }
+    .calendar-box .cal-confirm { display: block; width: 100%; padding: 0.5rem 0; margin-top: 0.8rem; border: none; border-radius: 40px; font-size: 0.9rem; font-weight: 450; cursor: pointer; background: #1e1e1e; color: white; }
     @media (max-width: 600px) {
       .app { padding: 1.2rem 1rem 6rem; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .timer-display { font-size: 3.2rem; }
-      .profile-header { flex-direction: column; align-items: flex-start; }
       .bottom-nav button { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
       .bottom-nav button .icon { font-size: 1.2rem; }
       .plan-date-nav .date-label { min-width: 70px; font-size: 0.8rem; }
@@ -162,26 +183,17 @@
       <div class="profile-header">
         <div class="profile-avatar" id="profileAvatar" style="background-image: url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23d0d0d0'/%3E%3Ctext x='18' y='48' font-size='36' fill='%23555'%3E👤%3C/text%3E%3C/svg%3E');"></div>
         <div class="profile-info">
-          <div class="name">
-            <input type="text" id="profileNameInput" placeholder="昵称" value="我">
-            <span style="font-size:0.8rem; color:#888;">#</span>
-            <input type="text" id="profileIpInput" placeholder="IP 属地" value="上海" style="width:80px; font-size:0.8rem;">
+          <div class="name-row">
+            <input type="text" id="profileNameInput" placeholder="昵称" value="我" style="width:60px;">
+            <span class="hash">#</span>
+            <input type="text" id="profileIpInput" placeholder="IP" value="上海" class="ip-input" style="width:50px;">
+            <button class="profile-paw" id="pawBtn">🐾</button>
           </div>
-          <div class="bio">
-            <input type="text" id="profileBioInput" placeholder="一句话介绍" value="极简 · 专注">
-          </div>
+          <div class="bio-line" id="bioDisplay">极简 · 专注</div>
+          <input type="text" id="bioInput" style="display:none; border:none; border-bottom:1px solid #ccc; background:transparent; font-size:0.9rem; outline:none; width:140px; color:#444; padding:0; margin-top:0.2rem;">
         </div>
-        <button class="profile-edit-btn" id="profileSaveBtn">保存</button>
       </div>
-
-      <!-- ⭐ 数据备份（极小隐藏版） -->
-      <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 0.6rem; opacity: 0.4; border-top: 1px solid #f0f0f0; padding-top: 0.6rem;">
-        <button id="exportDataBtn" style="background: none; border: none; color: #bbb; font-size: 0.7rem; cursor: pointer; padding: 0.1rem 0.3rem;">导出</button>
-        <span style="color: #ddd; font-size: 0.6rem;">|</span>
-        <button id="importDataBtn" style="background: none; border: none; color: #bbb; font-size: 0.7rem; cursor: pointer; padding: 0.1rem 0.3rem;">导入</button>
-        <input type="file" id="fileInput" accept=".json" style="display: none;">
-      </div>
-
+      <hr class="profile-divider">
       <div class="profile-stats">
         <div><strong id="profileTotal">0</strong> 总专注(h)</div>
         <div><strong id="profileDays">0</strong> 活跃天</div>
@@ -197,6 +209,33 @@
     <button data-section="sectionProfile"><span class="icon">👤</span> 我的</button>
   </div>
 </div>
+
+<!-- 导出/导入弹窗 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-btn" id="exportBtn">导出</button>
+    <button class="modal-btn" id="importBtn">导入</button>
+    <button class="modal-cancel" id="modalCancel">取消</button>
+  </div>
+</div>
+
+<!-- 日历弹窗 -->
+<div class="calendar-overlay" id="calendarOverlay">
+  <div class="calendar-box">
+    <div class="cal-header">
+      <button id="calPrevMonth">‹</button>
+      <span class="cal-title" id="calTitle">2026年9月</span>
+      <button id="calNextMonth">›</button>
+    </div>
+    <div class="cal-weekdays">
+      <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+    </div>
+    <div class="cal-days" id="calDays"></div>
+    <button class="cal-confirm" id="calConfirm">确定</button>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none;">
 
 <script>
 (function(){
@@ -298,6 +337,99 @@
       list.appendChild(li);
     });
   }
+
+  // 日历逻辑
+  var calYear, calMonth, calSelectedDate = null;
+  function openCalendar() {
+    var today = new Date();
+    calYear = today.getFullYear();
+    calMonth = today.getMonth();
+    calSelectedDate = planViewDate;
+    document.getElementById('calendarOverlay').classList.add('active');
+    renderCalendar();
+  }
+  function closeCalendar() {
+    document.getElementById('calendarOverlay').classList.remove('active');
+  }
+  function renderCalendar() {
+    var title = document.getElementById('calTitle');
+    title.textContent = calYear + '年' + (calMonth+1) + '月';
+    var daysContainer = document.getElementById('calDays');
+    daysContainer.innerHTML = '';
+    var firstDay = new Date(calYear, calMonth, 1).getDay();
+    var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    var daysInPrevMonth = new Date(calYear, calMonth, 0).getDate();
+    var todayStr = getToday();
+    for (var i = 0; i < firstDay; i++) {
+      var btn = document.createElement('button');
+      btn.textContent = daysInPrevMonth - firstDay + i + 1;
+      btn.className = 'other-month';
+      btn.disabled = true;
+      daysContainer.appendChild(btn);
+    }
+    for (var d = 1; d <= daysInMonth; d++) {
+      var btn = document.createElement('button');
+      btn.textContent = d;
+      var dateStr = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+      if (dateStr === todayStr) btn.style.fontWeight = 'bold';
+      if (dateStr === calSelectedDate) btn.classList.add('selected');
+      btn.addEventListener('click', function() {
+        var oldSelected = document.querySelector('.cal-days .selected');
+        if (oldSelected) oldSelected.classList.remove('selected');
+        this.classList.add('selected');
+        var day = parseInt(this.textContent);
+        calSelectedDate = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+      });
+      daysContainer.appendChild(btn);
+    }
+    var remaining = 42 - (firstDay + daysInMonth);
+    for (var r = 1; r <= remaining; r++) {
+      var btn = document.createElement('button');
+      btn.textContent = r;
+      btn.className = 'other-month';
+      btn.disabled = true;
+      daysContainer.appendChild(btn);
+    }
+  }
+  document.getElementById('calPrevMonth').addEventListener('click', function() {
+    calMonth--;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+  });
+  document.getElementById('calNextMonth').addEventListener('click', function() {
+    calMonth++;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCalendar();
+  });
+  document.getElementById('calConfirm').addEventListener('click', function() {
+    if (calSelectedDate) {
+      planViewDate = calSelectedDate;
+      renderPlans();
+    }
+    closeCalendar();
+  });
+  document.getElementById('calendarOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCalendar();
+  });
+
+  // 长按"今天"弹出日历
+  var longPressTimer = null;
+  var dateLabel = document.getElementById('planDateLabel');
+  dateLabel.addEventListener('mousedown', function() {
+    longPressTimer = setTimeout(function() {
+      openCalendar();
+    }, 800);
+  });
+  dateLabel.addEventListener('mouseup', function() { clearTimeout(longPressTimer); });
+  dateLabel.addEventListener('mouseleave', function() { clearTimeout(longPressTimer); });
+  dateLabel.addEventListener('touchstart', function(e) {
+    longPressTimer = setTimeout(function() {
+      openCalendar();
+    }, 800);
+  });
+  dateLabel.addEventListener('touchend', function() { clearTimeout(longPressTimer); });
+  dateLabel.addEventListener('touchmove', function() { clearTimeout(longPressTimer); });
+
   document.getElementById('planPrevBtn').addEventListener('click', function() {
     var d = new Date(planViewDate + 'T00:00:00');
     d.setDate(d.getDate() - 1);
@@ -314,6 +446,7 @@
     planViewDate = getToday();
     renderPlans();
   });
+
   document.getElementById('planAddBtn').addEventListener('click', function() {
     var input = document.getElementById('planInput');
     var text = input.value.trim();
@@ -406,7 +539,11 @@
     }
     document.getElementById('profileNameInput').value = store.profile.name || '';
     document.getElementById('profileIpInput').value = store.profile.ip || '';
-    document.getElementById('profileBioInput').value = store.profile.bio || '';
+    var bioDisplay = document.getElementById('bioDisplay');
+    var bioInput = document.getElementById('bioInput');
+    bioDisplay.textContent = store.profile.bio || '极简 · 专注';
+    bioDisplay.style.display = 'block';
+    bioInput.style.display = 'none';
   }
 
   var navBtns = document.querySelectorAll('.bottom-nav button');
@@ -484,13 +621,56 @@
     }
   });
 
-  document.getElementById('profileSaveBtn').addEventListener('click', function() {
+  // 自动保存个人资料
+  function autoSaveProfile() {
     store.profile.name = document.getElementById('profileNameInput').value.trim() || '我';
-    store.profile.ip = document.getElementById('profileIpInput').value.trim() || '未知';
-    store.profile.bio = document.getElementById('profileBioInput').value.trim() || '';
+    store.profile.ip = document.getElementById('profileIpInput').value.trim() || '上海';
+    saveStore();
+    refreshUI();
+  }
+  document.getElementById('profileNameInput').addEventListener('blur', autoSaveProfile);
+  document.getElementById('profileIpInput').addEventListener('blur', autoSaveProfile);
+  document.getElementById('profileNameInput').addEventListener('change', autoSaveProfile);
+  document.getElementById('profileIpInput').addEventListener('change', autoSaveProfile);
+
+  // 长按"极简 · 专注"编辑
+  var bioDisplay = document.getElementById('bioDisplay');
+  var bioInput = document.getElementById('bioInput');
+  var bioTimer = null;
+  bioDisplay.addEventListener('mousedown', function() {
+    bioTimer = setTimeout(function() {
+      bioDisplay.style.display = 'none';
+      bioInput.style.display = 'block';
+      bioInput.value = store.profile.bio || '极简 · 专注';
+      bioInput.focus();
+      bioInput.select();
+    }, 800);
+  });
+  bioDisplay.addEventListener('mouseup', function() { clearTimeout(bioTimer); });
+  bioDisplay.addEventListener('mouseleave', function() { clearTimeout(bioTimer); });
+  bioDisplay.addEventListener('touchstart', function(e) {
+    bioTimer = setTimeout(function() {
+      bioDisplay.style.display = 'none';
+      bioInput.style.display = 'block';
+      bioInput.value = store.profile.bio || '极简 · 专注';
+      bioInput.focus();
+      bioInput.select();
+    }, 800);
+  });
+  bioDisplay.addEventListener('touchend', function() { clearTimeout(bioTimer); });
+  bioDisplay.addEventListener('touchmove', function() { clearTimeout(bioTimer); });
+
+  bioInput.addEventListener('blur', function() {
+    var val = this.value.trim() || '极简 · 专注';
+    store.profile.bio = val;
     saveStore();
     refreshUI();
   });
+  bioInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { this.blur(); }
+  });
+
+  // 头像自动保存
   document.getElementById('profileAvatar').addEventListener('click', function() {
     var input = document.createElement('input');
     input.type = 'file';
@@ -509,12 +689,20 @@
     };
     input.click();
   });
-  document.getElementById('profileMini').addEventListener('click', function() {
-    switchSection('sectionProfile');
+
+  // 🐾 点击弹出导出/导入
+  document.getElementById('pawBtn').addEventListener('click', function() {
+    document.getElementById('modalOverlay').classList.add('active');
+  });
+  document.getElementById('modalCancel').addEventListener('click', function() {
+    document.getElementById('modalOverlay').classList.remove('active');
+  });
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
   });
 
-  // ========== 数据备份与恢复 ==========
-  document.getElementById('exportDataBtn').addEventListener('click', function() {
+  // 导出
+  document.getElementById('exportBtn').addEventListener('click', function() {
     var dataStr = localStorage.getItem('focusMeData');
     if (!dataStr) { alert('暂无数据可备份'); return; }
     var blob = new Blob([dataStr], {type: 'application/json'});
@@ -526,10 +714,13 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    alert('✅ 备份已下载！请保存好这个文件');
+    document.getElementById('modalOverlay').classList.remove('active');
+    alert('✅ 备份已下载！');
   });
 
-  document.getElementById('importDataBtn').addEventListener('click', function() {
+  // 导入
+  document.getElementById('importBtn').addEventListener('click', function() {
+    document.getElementById('modalOverlay').classList.remove('active');
     document.getElementById('fileInput').click();
   });
 
@@ -556,6 +747,10 @@
     };
     reader.readAsText(file);
     this.value = '';
+  });
+
+  document.getElementById('profileMini').addEventListener('click', function() {
+    switchSection('sectionProfile');
   });
 
   refreshUI();
