@@ -21,9 +21,10 @@
     .bottom-nav button .icon { font-size: 1.4rem; line-height: 1; }
     .section { display: none; flex-direction: column; flex: 1; overflow: hidden; }
     .section.active { display: flex; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-shrink: 0; }
-    .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
-    .logo span { background: #1e1e1e; color: white; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.8rem; margin-left: 0.4rem; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-shrink: 0; padding-top: env(safe-area-inset-top); padding-top: constant(safe-area-inset-top); }
+    .logo { display: flex; align-items: center; gap: 0.3rem; font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
+    .logo .focus-text { font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
+    .logo .me-badge { background: #f0f0f0; padding: 0.05rem 0.6rem; border-radius: 40px; font-size: 0.8rem; font-weight: 450; color: #333; display: inline-flex; align-items: center; justify-content: center; height: 1.6rem; line-height: 1; }
     .profile-mini { display: flex; align-items: center; gap: 0.6rem; background: #f0f0f0; padding: 0.3rem 1rem 0.3rem 0.8rem; border-radius: 40px; cursor: pointer; }
     .profile-mini img { width: 32px; height: 32px; border-radius: 50%; background: #d0d0d0; object-fit: cover; }
     .profile-mini span { font-size: 0.9rem; font-weight: 450; }
@@ -42,9 +43,6 @@
     .type-selector { margin-top: 0.6rem; display: flex; justify-content: center; align-items: center; }
     .type-selector .type-label { background: #f0f0f0; padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.85rem; cursor: pointer; display: inline-block; color: #333; font-weight: 450; }
     .type-selector .type-label.active { background: #1e1e1e; color: white; font-weight: 600; }
-    .test-entry { margin-top: 0.6rem; text-align: center; }
-    .test-entry button { background: none; border: none; color: #ccc; font-size: 0.7rem; cursor: pointer; padding: 0.2rem 0.6rem; }
-    .test-entry button:active { color: #999; }
     /* ===== 统计页面（推入） ===== */
     .stats-page { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #ffffff; border-radius: 2rem; padding: 1.8rem 1.8rem 2rem; z-index: 20; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); overflow-y: auto; box-shadow: -4px 0 24px rgba(0,0,0,0.04); }
     .stats-page.open { transform: translateX(0); }
@@ -97,7 +95,6 @@
     .mood-page .mood-grid .mood-cell.other-month .mood-date { color: #ccc; }
     .mood-page .mood-grid .mood-cell.other-month .mood-dot { opacity: 0.3; }
     .mood-page .mood-grid .mood-cell.disabled { opacity: 0.5; cursor: default; }
-    /* 右下角交互点 */
     .mood-page .border-toggle { position: absolute; bottom: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: transparent; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; z-index: 5; opacity: 0.6; transition: opacity 0.2s; }
     .mood-page .border-toggle:active { opacity: 1; }
     /* ===== 颜色选择弹窗（极小版） ===== */
@@ -142,13 +139,6 @@
     .modal-box .input-row input:focus { border-color: #1e1e1e; }
     .modal-box .input-row button { background: #1e1e1e; color: white; border: none; padding: 0 1.2rem; border-radius: 40px; font-size: 0.85rem; cursor: pointer; }
     .modal-box .cancel-btn { display: block; width: 100%; padding: 0.6rem 0; margin-top: 0.8rem; border: none; background: transparent; color: #999; font-size: 0.9rem; cursor: pointer; }
-    /* ===== 编辑记录弹窗 ===== */
-    .edit-item { padding: 0.6rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-    .edit-item .edit-info { flex: 1; }
-    .edit-item .edit-info .edit-date { color: #999; font-size: 0.75rem; }
-    .edit-item .edit-actions button { background: none; border: none; color: #999; font-size: 0.8rem; cursor: pointer; padding: 0.1rem 0.3rem; }
-    .edit-item .edit-actions button:active { color: #333; }
-    .edit-add-btn { display: block; width: 100%; padding: 0.5rem; margin-top: 0.4rem; border: 1px dashed #ddd; border-radius: 40px; background: transparent; color: #999; font-size: 0.85rem; cursor: pointer; }
     /* ===== 其他页面 ===== */
     #sectionTweets, #sectionPlans, #sectionProfile { padding-bottom: 0.5rem; overflow-y: auto; }
     #sectionProfile { position: relative; }
@@ -231,7 +221,10 @@
 <body>
 <div class="app" id="app">
   <div class="top-bar">
-    <div class="logo">⚡ focus<span>·me</span></div>
+    <div class="logo">
+      <span class="focus-text">focus</span>
+      <span class="me-badge">me</span>
+    </div>
     <div id="topRightContainer"></div>
   </div>
 
@@ -251,9 +244,6 @@
       <div class="type-selector">
         <span class="type-label" id="typeLabel">〈 未分类 〉</span>
       </div>
-    </div>
-    <div class="test-entry">
-      <button id="editRecordsBtn">📝 编辑记录（测试）</button>
     </div>
   </div>
 
@@ -352,14 +342,12 @@
     </div>
     <div class="swipe-hint-mood">— 向上滑动查看心情日历 —</div>
 
-    <!-- 心情日历独立推入页 -->
     <div class="mood-page" id="moodPage">
       <div class="mood-header">
         <button class="mood-back" id="moodBackBtn"><span>‹</span> 返回</button>
         <h2>CALENDAR</h2>
         <div style="width:40px;"></div>
       </div>
-
       <div class="mood-card">
         <div class="mood-nav">
           <button id="moodPrevMonth">‹</button>
@@ -396,23 +384,6 @@
       <button id="addTypeBtn">添加</button>
     </div>
     <button class="cancel-btn" id="typeModalCancel">取消</button>
-  </div>
-</div>
-
-<!-- ===== 编辑记录弹窗 ===== -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>📝 编辑专注记录</h3>
-      <button class="close-btn" id="editModalClose">✕</button>
-    </div>
-    <div id="editList"></div>
-    <div class="input-row">
-      <input type="number" id="editMinutesInput" placeholder="分钟数…" style="min-width:80px;flex:0.5;">
-      <input type="text" id="editTypeInput" placeholder="类型…" style="flex:1;">
-      <button id="addRecordBtn">添加</button>
-    </div>
-    <button class="cancel-btn" id="editModalCancel">关闭</button>
   </div>
 </div>
 
@@ -1134,67 +1105,6 @@
     timerSeconds = 0;
     updateTimerDisplay();
     document.getElementById('timerNoteInput').value = '';
-    if (isStatsOpen) renderStats();
-    renderProfileStats();
-  });
-
-  // ========== 编辑记录 ==========
-  function renderEditModal() {
-    var container = document.getElementById('editList');
-    container.innerHTML = '';
-    if (store.timerRecords.length === 0) {
-      container.innerHTML = '<div style="color:#aaa;padding:0.6rem 0;font-size:0.85rem;">暂无记录，添加一条测试吧</div>';
-      return;
-    }
-    var sorted = store.timerRecords.slice().reverse();
-    sorted.forEach(function(r, idx) {
-      var div = document.createElement('div');
-      div.className = 'edit-item';
-      var realIdx = store.timerRecords.length - 1 - idx;
-      div.innerHTML = '<div class="edit-info"><div>' + formatDuration(r.durationSec) + ' · ' + (r.type || '未分类') + (r.note ? ' · ' + r.note : '') + '</div><div class="edit-date">' + r.date + '</div></div><div class="edit-actions"><button class="edit-del" data-idx="' + realIdx + '">✕</button></div>';
-      container.appendChild(div);
-    });
-    document.querySelectorAll('.edit-del').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var idx = parseInt(this.dataset.idx);
-        if (confirm('删除这条记录？')) {
-          store.timerRecords.splice(idx, 1);
-          saveStore();
-          renderEditModal();
-          if (isStatsOpen) renderStats();
-          renderProfileStats();
-        }
-      });
-    });
-  }
-
-  document.getElementById('editRecordsBtn').addEventListener('click', function() {
-    renderEditModal();
-    document.getElementById('editModal').classList.add('active');
-  });
-
-  document.getElementById('editModalClose').addEventListener('click', function() {
-    document.getElementById('editModal').classList.remove('active');
-  });
-  document.getElementById('editModalCancel').addEventListener('click', function() {
-    document.getElementById('editModal').classList.remove('active');
-  });
-
-  document.getElementById('addRecordBtn').addEventListener('click', function() {
-    var minutes = parseInt(document.getElementById('editMinutesInput').value);
-    var type = document.getElementById('editTypeInput').value.trim() || '测试';
-    if (!minutes || minutes <= 0) { alert('请输入有效分钟数'); return; }
-    var sec = minutes * 60;
-    store.timerRecords.push({
-      date: getToday(),
-      durationSec: sec,
-      note: '测试',
-      type: type
-    });
-    saveStore();
-    document.getElementById('editMinutesInput').value = '';
-    document.getElementById('editTypeInput').value = '';
-    renderEditModal();
     if (isStatsOpen) renderStats();
     renderProfileStats();
   });
