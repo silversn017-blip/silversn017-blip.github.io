@@ -22,9 +22,7 @@
     .section { display: none; flex-direction: column; flex: 1; overflow: hidden; }
     .section.active { display: flex; }
     .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-shrink: 0; padding-top: env(safe-area-inset-top); padding-top: constant(safe-area-inset-top); }
-    .logo { display: flex; align-items: center; gap: 0.3rem; font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
-    .logo .focus-text { font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
-    .logo .me-badge { background: #f0f0f0; padding: 0.05rem 0.6rem; border-radius: 40px; font-size: 0.8rem; font-weight: 450; color: #333; display: inline-flex; align-items: center; justify-content: center; height: 1.6rem; line-height: 1; }
+    .logo { font-weight: 600; font-size: 2rem; letter-spacing: -0.5px; }
     .profile-mini { display: flex; align-items: center; gap: 0.6rem; background: #f0f0f0; padding: 0.3rem 1rem 0.3rem 0.8rem; border-radius: 40px; cursor: pointer; }
     .profile-mini img { width: 32px; height: 32px; border-radius: 50%; background: #d0d0d0; object-fit: cover; }
     .profile-mini span { font-size: 0.9rem; font-weight: 450; }
@@ -221,10 +219,7 @@
 <body>
 <div class="app" id="app">
   <div class="top-bar">
-    <div class="logo">
-      <span class="focus-text">focus</span>
-      <span class="me-badge">me</span>
-    </div>
+    <div class="logo">focus</div>
     <div id="topRightContainer"></div>
   </div>
 
