@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="专注仪表">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ffffff'/%3E%3Ctext x='50' y='75' font-size='70' text-anchor='middle'%3E🐾%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ffffff'/%3E%3Ctext x='50' y='75' font-size='70' text-anchor='middle'%3E🐾%3C/text%3E%3C/svg%3E">
+  <title>专注仪表</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background: #f7f7f7; color: #1e1e1e; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+    .app { max-width: 800px; width: 100%; background: #ffffff; border-radius: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.04); padding: 2rem 1.8rem 6rem; position: relative; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 1px solid #eaeaea; display: flex; justify-content: space-around; align-items: center; padding: 0.6rem 0.8rem 0.8rem; z-index: 100; max-width: 800px; left: 50%; transform: translateX(-50%); border-radius: 2rem 2rem 0 0; }
+    .bottom-nav button { background: transparent; border: none; font-size: 0.8rem; font-weight: 450; color: #555; padding: 0.3rem 0.8rem; border-radius: 40px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+    .bottom-nav button.active { background: #1e1e1e; color: white; }
+    .bottom-nav button .icon { font-size: 1.4rem; line-height: 1; }
+    .section { display: block; }
+    .section.hidden { display: none; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -0.5px; }
+    .logo span { background: #1e1e1e; color: white; padding: 0.1rem 0.7rem; border-radius: 40px; font-size: 0.8rem; margin-left: 0.4rem; }
+    .profile-mini { display: flex; align-items: center; gap: 0.6rem; background: #f0f0f0; padding: 0.3rem 1rem 0.3rem 0.8rem; border-radius: 40px; cursor: pointer; }
+    .profile-mini img { width: 32px; height: 32px; border-radius: 50%; background: #d0d0d0; object-fit: cover; }
+    .profile-mini span { font-size: 0.9rem; font-weight: 450; }
+    .timer-section { background: #f3f3f3; border-radius: 2.5rem; padding: 2rem 1.8rem; margin-bottom: 2.2rem; text-align: center; }
+    .timer-display { font-size: 4.2rem; font-weight: 300; letter-spacing: 4px; font-variant-numeric: tabular-nums; margin-bottom: 0.5rem; color: #111; }
+    .timer-controls { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; margin: 0.8rem 0 0.6rem; }
+    .timer-controls button { background: #1e1e1e; border: none; color: white; padding: 0.5rem 1.8rem; border-radius: 60px; font-size: 0.9rem; font-weight: 450; cursor: pointer; }
+    .timer-controls button.outline { background: transparent; color: #1e1e1e; border: 1px solid #bbb; }
+    .timer-note-area { margin-top: 1.2rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+    .timer-note-area input { flex: 1; min-width: 160px; padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 60px; background: white; font-size: 0.9rem; outline: none; }
+    .timer-note-area input:focus { border-color: #1e1e1e; }
+    .timer-note-area button { background: #1e1e1e; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 60px; font-size: 0.85rem; cursor: pointer; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1.5rem 0 0.5rem; }
+    .stat-item { background: #f3f3f3; padding: 0.8rem 0.4rem; border-radius: 1.2rem; text-align: center; }
+    .stat-item .num { font-size: 1.5rem; font-weight: 500; letter-spacing: -0.3px; }
+    .stat-item .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.4px; color: #555; margin-top: 0.2rem; }
+    .tweet-box textarea { width: 100%; border: 1px solid #ddd; border-radius: 1.8rem; padding: 1rem 1.2rem; font-size: 0.95rem; resize: vertical; min-height: 80px; background: #fafafa; outline: none; }
+    .tweet-box textarea:focus { border-color: #1e1e1e; background: #fff; }
+    .tweet-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; flex-wrap: wrap; }
+    .tweet-actions label { background: #f0f0f0; padding: 0.3rem 1rem; border-radius: 60px; font-size: 0.85rem; cursor: pointer; border: 1px solid #ddd; }
+    .tweet-actions label input { display: none; }
+    .tweet-actions button { background: #1e1e1e; color: white; border: none; padding: 0.4rem 2rem; border-radius: 60px; font-size: 0.9rem; cursor: pointer; }
+    .tweet-feed { margin-top: 2rem; }
+    .tweet-item { border-bottom: 1px solid #ececec; padding: 1rem 0; display: flex; gap: 0.8rem; align-items: flex-start; }
+    .tweet-item .avatar { width: 40px; height: 40px; background: #d0d0d0; border-radius: 50%; flex-shrink: 0; background-size: cover; background-position: center; }
+    .tweet-item .content { flex: 1; }
+    .tweet-item .content .meta { font-size: 0.8rem; color: #666; margin-bottom: 0.2rem; }
+    .tweet-item .content .text { font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; }
+    .tweet-item .content .img-preview { margin-top: 0.4rem; max-width: 100%; max-height: 200px; border-radius: 1rem; background: #eee; object-fit: cover; }
+    .tweet-item .delete-tweet { background: none; border: none; color: #ccc; font-size: 1.2rem; cursor: pointer; padding: 0 0.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .tweet-item .delete-tweet:active { color: #e74c3c; }
+    .plan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .plan-header > span { font-weight: 500; font-size: 1.1rem; }
+    .plan-date-nav { display: flex; align-items: center; gap: 0.6rem; }
+    .plan-date-nav button { background: #f0f0f0; border: 1px solid #ddd; border-radius: 40px; padding: 0.2rem 0.8rem; font-size: 1rem; cursor: pointer; }
+    .plan-date-nav .date-label { font-size: 0.9rem; font-weight: 450; min-width: 100px; text-align: center; }
+    .plan-date-nav .today-btn { background: #1e1e1e; color: white; border: none; padding: 0.2rem 1rem; font-size: 0.75rem; }
+    .plan-list { list-style: none; margin-top: 0.6rem; }
+    .plan-list li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #efefef; }
+    .plan-list li input[type="checkbox"] { width: 18px; height: 18px; accent-color: #1e1e1e; }
+    .plan-list li label { flex: 1; font-size: 0.95rem; }
+    .plan-list li .del-plan { background: none; border: none; color: #999; font-size: 1.2rem; cursor: pointer; }
+    .plan-add { display: flex; gap: 0.4rem; margin-top: 0.8rem; }
+    .plan-add input { flex: 1; padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 60px; background: white; font-size: 0.9rem; outline: none; }
+    .plan-add button { background: #1e1e1e; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 60px; cursor: pointer; }
+    .plan-hint { font-size: 0.8rem; color: #999; margin-top: 0.5rem; min-height: 1.5rem; }
+    .plan-list .past-plan label { color: #888; }
+    .profile-section { background: #f8f8f8; border-radius: 2rem; padding: 1.8rem 1.8rem 1.2rem; margin: 0.5rem 0; }
+    .profile-header { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: #ccc; background-size: cover; background-position: center; flex-shrink: 0; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.04); cursor: pointer; }
+    .profile-info { flex: 1; min-width: 120px; }
+    .profile-info .name { font-size: 1.3rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .profile-info .name input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 1.3rem; font-weight: 500; outline: none; width: 120px; }
+    .profile-info .bio { font-size: 0.9rem; color: #444; margin-top: 0.2rem; }
+    .profile-info .bio input { border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 0.9rem; outline: none; width: 140px; color: #444; }
+    .profile-edit-btn { background: #1e1e1e; color: white; border: none; padding: 0.3rem 1.2rem; border-radius: 60px; font-size: 0.8rem; cursor: pointer; flex-shrink: 0; }
+    .profile-stats { display: flex; gap: 2rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; }
+    .profile-stats div { font-size: 0.9rem; }
+    .profile-stats strong { font-weight: 600; }
+    @media (max-width: 600px) {
+      .app { padding: 1.2rem 1rem 6rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .timer-display { font-size: 3.2rem; }
+      .profile-header { flex-direction: column; align-items: flex-start; }
+      .bottom-nav button { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+      .bottom-nav button .icon { font-size: 1.2rem; }
+      .plan-date-nav .date-label { min-width: 70px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top-bar">
+    <div class="logo">⚡ focus<span>·me</span></div>
+    <div class="profile-mini" id="profileMini">
+      <img id="miniAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23d0d0d0'/%3E%3Ctext x='8' y='26' font-size='18' fill='%23555'%3E👤%3C/text%3E%3C/svg%3E" alt="avatar">
+      <span id="miniName">我</span>
+    </div>
+  </div>
+
+  <div id="sectionHome" class="section">
+    <div class="timer-section">
+      <div class="timer-display" id="timerDisplay">00:00:00</div>
+      <div class="timer-controls">
+        <button id="timerStartBtn">▶ 开始</button>
+        <button id="timerPauseBtn" class="outline">⏸ 暂停</button>
+        <button id="timerResetBtn" class="outline">↺ 重置</button>
+      </div>
+      <div class="timer-note-area">
+        <input type="text" id="timerNoteInput" placeholder="记录本次专注备注 (可选)">
+        <button id="timerSaveRecordBtn">✔ 记录</button>
+      </div>
+      <div style="font-size:0.8rem; color:#888; margin-top:0.3rem;">记录后自动重置计时器</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item"><div class="num" id="statTotal">0</div><div class="label">总专注 (h)</div></div>
+      <div class="stat-item"><div class="num" id="statDailyAvg">0</div><div class="label">日均 (h)</div></div>
+      <div class="stat-item"><div class="num" id="statMonth">0</div><div class="label">本月 (h)</div></div>
+      <div class="stat-item"><div class="num" id="statYear">0</div><div class="label">年度 (h)</div></div>
+    </div>
+  </div>
+
+  <div id="sectionTweets" class="section hidden">
+    <div class="tweet-box">
+      <textarea id="tweetInput" placeholder="此刻的想法… (支持文案+图片)"></textarea>
+      <div class="tweet-actions">
+        <label>📎 添加照片 <input type="file" id="tweetImageInput" accept="image/*"></label>
+        <button id="tweetPublishBtn">发布</button>
+      </div>
+    </div>
+    <div class="tweet-feed" id="tweetFeed">
+      <div style="font-size:0.9rem; color:#999; padding:0.4rem 0;">— 过去的动态 —</div>
+    </div>
+  </div>
+
+  <div id="sectionPlans" class="section hidden">
+    <div class="plan-header">
+      <span>📋 每日计划</span>
+      <div class="plan-date-nav">
+        <button id="planPrevBtn">‹</button>
+        <span class="date-label" id="planDateLabel">今天</span>
+        <button id="planNextBtn">›</button>
+        <button class="today-btn" id="planTodayBtn">今天</button>
+      </div>
+    </div>
+    <ul class="plan-list" id="planList"></ul>
+    <div class="plan-add" id="planAddArea">
+      <input type="text" id="planInput" placeholder="新计划…">
+      <button id="planAddBtn">+</button>
+    </div>
+    <div class="plan-hint" id="planHint"></div>
+  </div>
+
+  <div id="sectionProfile" class="section hidden">
+    <div class="profile-section">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar" style="background-image: url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23d0d0d0'/%3E%3Ctext x='18' y='48' font-size='36' fill='%23555'%3E👤%3C/text%3E%3C/svg%3E');"></div>
+        <div class="profile-info">
+          <div class="name">
+            <input type="text" id="profileNameInput" placeholder="昵称" value="我">
+            <span style="font-size:0.8rem; color:#888;">#</span>
+            <input type="text" id="profileIpInput" placeholder="IP 属地" value="上海" style="width:80px; font-size:0.8rem;">
+          </div>
+          <div class="bio">
+            <input type="text" id="profileBioInput" placeholder="一句话介绍" value="极简 · 专注">
+          </div>
+        </div>
+        <button class="profile-edit-btn" id="profileSaveBtn">保存</button>
+      </div>
+      <div class="profile-stats">
+        <div><strong id="profileTotal">0</strong> 总专注(h)</div>
+        <div><strong id="profileDays">0</strong> 活跃天</div>
+        <div><strong id="profilePosts">0</strong> 动态</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="active" data-section="sectionHome"><span class="icon">⏱️</span> 专注</button>
+    <button data-section="sectionTweets"><span class="icon">✍️</span> 动态</button>
+    <button data-section="sectionPlans"><span class="icon">📋</span> 计划</button>
+    <button data-section="sectionProfile"><span class="icon">👤</span> 我的</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var store = { timerRecords: [], tweets: [], plans: [], profile: { name: '我', ip: '上海', bio: '极简 · 专注', avatar: '' } };
+  function loadStore() {
+    try {
+      var raw = localStorage.getItem('focusMeData');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        store = parsed;
+        if (!store.timerRecords) store.timerRecords = [];
+        if (!store.tweets) store.tweets = [];
+        if (!store.plans) store.plans = [];
+        if (!store.profile) store.profile = { name: '我', ip: '上海', bio: '极简 · 专注', avatar: '' };
+      }
+    } catch(e) {}
+  }
+  function saveStore() { localStorage.setItem('focusMeData', JSON.stringify(store)); }
+  loadStore();
+
+  function formatTime(sec) {
+    var h = String(Math.floor(sec / 3600)).padStart(2, '0');
+    var m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    var s = String(Math.floor(sec % 60)).padStart(2, '0');
+    return h + ':' + m + ':' + s;
+  }
+  function getToday() { return new Date().toISOString().slice(0,10); }
+  function formatDateLabel(d) {
+    if (d === getToday()) return '今天';
+    var date = new Date(d + 'T00:00:00');
+    return (date.getMonth()+1) + '月' + date.getDate() + '日';
+  }
+  function totalSeconds() {
+    var sum = 0;
+    store.timerRecords.forEach(function(r) { sum += (r.durationSec || 0); });
+    return sum;
+  }
+  function computeStats() {
+    var totalSec = totalSeconds();
+    var totalHours = totalSec / 3600;
+    var records = store.timerRecords;
+    var daysSet = new Set();
+    records.forEach(function(r) { daysSet.add(r.date); });
+    var activeDays = daysSet.size || 1;
+    var today = getToday();
+    var monthKey = today.slice(0,7);
+    var yearKey = today.slice(0,4);
+    var monthSec = 0, yearSec = 0;
+    records.forEach(function(r) {
+      if (r.date.slice(0,7) === monthKey) monthSec += r.durationSec;
+      if (r.date.slice(0,4) === yearKey) yearSec += r.durationSec;
+    });
+    var dailyAvgSec = activeDays > 0 ? totalSec / activeDays : 0;
+    return { totalHours: totalHours, dailyAvgHours: dailyAvgSec / 3600, monthHours: monthSec / 3600, yearHours: yearSec / 3600, activeDays: activeDays, totalPosts: store.tweets.length };
+  }
+
+  var planViewDate = getToday();
+  function renderPlans() {
+    var list = document.getElementById('planList');
+    list.innerHTML = '';
+    document.getElementById('planDateLabel').textContent = formatDateLabel(planViewDate);
+    var plans = store.plans.filter(function(p) { return p.date === planViewDate; });
+    var isToday = planViewDate === getToday();
+    var addArea = document.getElementById('planAddArea');
+    document.getElementById('planInput').disabled = !isToday;
+    document.getElementById('planAddBtn').disabled = !isToday;
+    addArea.style.opacity = isToday ? '1' : '0.4';
+    if (plans.length === 0) {
+      var li = document.createElement('li');
+      li.style.color = '#aaa';
+      li.textContent = isToday ? '今天还没有计划，添加一项吧' : '这一天没有计划';
+      list.appendChild(li);
+      return;
+    }
+    plans.forEach(function(p) {
+      var li = document.createElement('li');
+      if (!isToday) li.classList.add('past-plan');
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = p.done || false;
+      if (!isToday) cb.disabled = true;
+      cb.addEventListener('change', function() {
+        if (isToday) { p.done = this.checked; saveStore(); }
+      });
+      var label = document.createElement('label');
+      label.textContent = p.text;
+      var del = document.createElement('button');
+      del.className = 'del-plan';
+      del.textContent = '✕';
+      del.style.display = isToday ? 'block' : 'none';
+      del.addEventListener('click', function() {
+        if (isToday) {
+          store.plans = store.plans.filter(function(item) { return item.id !== p.id; });
+          saveStore();
+          renderPlans();
+        }
+      });
+      li.appendChild(cb); li.appendChild(label); li.appendChild(del);
+      list.appendChild(li);
+    });
+  }
+  document.getElementById('planPrevBtn').addEventListener('click', function() {
+    var d = new Date(planViewDate + 'T00:00:00');
+    d.setDate(d.getDate() - 1);
+    planViewDate = d.toISOString().slice(0,10);
+    renderPlans();
+  });
+  document.getElementById('planNextBtn').addEventListener('click', function() {
+    var d = new Date(planViewDate + 'T00:00:00');
+    d.setDate(d.getDate() + 1);
+    planViewDate = d.toISOString().slice(0,10);
+    renderPlans();
+  });
+  document.getElementById('planTodayBtn').addEventListener('click', function() {
+    planViewDate = getToday();
+    renderPlans();
+  });
+  document.getElementById('planAddBtn').addEventListener('click', function() {
+    var input = document.getElementById('planInput');
+    var text = input.value.trim();
+    if (!text) return;
+    if (planViewDate !== getToday()) { alert('只能向今天添加计划'); return; }
+    store.plans.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2,4), text: text, done: false, date: getToday() });
+    saveStore();
+    input.value = '';
+    renderPlans();
+  });
+  document.getElementById('planInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('planAddBtn').click();
+  });
+
+  function renderStats() {
+    var s = computeStats();
+    document.getElementById('statTotal').textContent = s.totalHours.toFixed(1);
+    document.getElementById('statDailyAvg').textContent = s.dailyAvgHours.toFixed(1);
+    document.getElementById('statMonth').textContent = s.monthHours.toFixed(1);
+    document.getElementById('statYear').textContent = s.yearHours.toFixed(1);
+    document.getElementById('profileTotal').textContent = s.totalHours.toFixed(1);
+    document.getElementById('profileDays').textContent = s.activeDays;
+    document.getElementById('profilePosts').textContent = s.totalPosts;
+  }
+
+  function renderTweets() {
+    var feed = document.getElementById('tweetFeed');
+    var firstChild = feed.firstChild;
+    feed.innerHTML = '';
+    if (firstChild) feed.appendChild(firstChild);
+    var tweets = store.tweets.slice().reverse();
+    if (tweets.length === 0) {
+      var empty = document.createElement('div');
+      empty.style.color = '#aaa';
+      empty.style.padding = '0.8rem 0';
+      empty.textContent = '还没有动态，发布一条吧';
+      feed.appendChild(empty);
+      return;
+    }
+    tweets.forEach(function(t) {
+      var item = document.createElement('div');
+      item.className = 'tweet-item';
+      var avatarDiv = document.createElement('div');
+      avatarDiv.className = 'avatar';
+      var avatarImg = store.profile.avatar || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"%3E%3Crect width="40" height="40" fill="%23d0d0d0"/%3E%3Ctext x="8" y="26" font-size="18" fill="%23555"%3E👤%3C/text%3E%3C/svg%3E';
+      avatarDiv.style.backgroundImage = 'url(' + avatarImg + ')';
+      var contentDiv = document.createElement('div');
+      contentDiv.className = 'content';
+      var meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = (store.profile.name || '我') + ' · ' + (t.date || '未知');
+      var textP = document.createElement('div');
+      textP.className = 'text';
+      textP.textContent = t.text || '';
+      contentDiv.appendChild(meta);
+      contentDiv.appendChild(textP);
+      if (t.image) {
+        var img = document.createElement('img');
+        img.className = 'img-preview';
+        img.src = t.image;
+        img.alt = '配图';
+        contentDiv.appendChild(img);
+      }
+      var delBtn = document.createElement('button');
+      delBtn.className = 'delete-tweet';
+      delBtn.textContent = '✕';
+      delBtn.addEventListener('click', function() {
+        if (confirm('确定删除这条动态吗？')) {
+          store.tweets = store.tweets.filter(function(item) { return item.id !== t.id; });
+          saveStore();
+          renderTweets();
+          renderStats();
+        }
+      });
+      item.appendChild(avatarDiv);
+      item.appendChild(contentDiv);
+      item.appendChild(delBtn);
+      feed.appendChild(item);
+    });
+  }
+
+  function refreshUI() {
+    renderStats();
+    renderTweets();
+    renderPlans();
+    document.getElementById('miniName').textContent = store.profile.name || '我';
+    if (store.profile.avatar) {
+      document.getElementById('miniAvatar').src = store.profile.avatar;
+      document.getElementById('profileAvatar').style.backgroundImage = 'url(' + store.profile.avatar + ')';
+    }
+    document.getElementById('profileNameInput').value = store.profile.name || '';
+    document.getElementById('profileIpInput').value = store.profile.ip || '';
+    document.getElementById('profileBioInput').value = store.profile.bio || '';
+  }
+
+  var navBtns = document.querySelectorAll('.bottom-nav button');
+  var sections = {
+    sectionHome: document.getElementById('sectionHome'),
+    sectionTweets: document.getElementById('sectionTweets'),
+    sectionPlans: document.getElementById('sectionPlans'),
+    sectionProfile: document.getElementById('sectionProfile')
+  };
+  function switchSection(id) {
+    for (var key in sections) { if (sections[key]) sections[key].classList.add('hidden'); }
+    if (sections[id]) sections[id].classList.remove('hidden');
+    navBtns.forEach(function(b) {
+      b.classList.remove('active');
+      if (b.dataset.section === id) b.classList.add('active');
+    });
+  }
+  navBtns.forEach(function(b) {
+    b.addEventListener('click', function() {
+      var id = this.dataset.section;
+      if (id) switchSection(id);
+    });
+  });
+
+  var timerInterval = null, timerSeconds = 0, isRunning = false;
+  var timerDisplay = document.getElementById('timerDisplay');
+  document.getElementById('timerStartBtn').addEventListener('click', function() {
+    if (isRunning || timerInterval) return;
+    isRunning = true;
+    timerInterval = setInterval(function() { timerSeconds++; timerDisplay.textContent = formatTime(timerSeconds); }, 1000);
+  });
+  document.getElementById('timerPauseBtn').addEventListener('click', function() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    isRunning = false;
+  });
+  document.getElementById('timerResetBtn').addEventListener('click', function() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    isRunning = false;
+    timerSeconds = 0;
+    timerDisplay.textContent = '00:00:00';
+  });
+  document.getElementById('timerSaveRecordBtn').addEventListener('click', function() {
+    if (timerSeconds === 0) { alert('计时器为0，无法记录'); return; }
+    var note = document.getElementById('timerNoteInput').value.trim() || '专注';
+    store.timerRecords.push({ date: getToday(), durationSec: timerSeconds, note: note });
+    saveStore();
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    isRunning = false;
+    timerSeconds = 0;
+    timerDisplay.textContent = '00:00:00';
+    document.getElementById('timerNoteInput').value = '';
+    refreshUI();
+  });
+
+  document.getElementById('tweetPublishBtn').addEventListener('click', function() {
+    var text = document.getElementById('tweetInput').value.trim();
+    if (!text) { alert('文案不能为空'); return; }
+    var fileInput = document.getElementById('tweetImageInput');
+    var file = fileInput.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        store.tweets.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2,4), text: text, image: e.target.result, date: new Date().toLocaleString('zh-CN', { hour12: false }) });
+        saveStore();
+        document.getElementById('tweetInput').value = '';
+        document.getElementById('tweetImageInput').value = '';
+        refreshUI();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      store.tweets.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2,4), text: text, image: null, date: new Date().toLocaleString('zh-CN', { hour12: false }) });
+      saveStore();
+      document.getElementById('tweetInput').value = '';
+      refreshUI();
+    }
+  });
+
+  document.getElementById('profileSaveBtn').addEventListener('click', function() {
+    store.profile.name = document.getElementById('profileNameInput').value.trim() || '我';
+    store.profile.ip = document.getElementById('profileIpInput').value.trim() || '未知';
+    store.profile.bio = document.getElementById('profileBioInput').value.trim() || '';
+    saveStore();
+    refreshUI();
+  });
+  document.getElementById('profileAvatar').addEventListener('click', function() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+      var file = e.target.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          store.profile.avatar = ev.target.result;
+          saveStore();
+          refreshUI();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  });
+  document.getElementById('profileMini').addEventListener('click', function() {
+    switchSection('sectionProfile');
+  });
+
+  refreshUI();
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'focusMeData') { loadStore(); refreshUI(); }
+  });
+})();
+</script>
+</body>
+</html>
