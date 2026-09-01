@@ -83,12 +83,6 @@
     .profile-stats { display: flex; gap: 2rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; }
     .profile-stats div { font-size: 0.9rem; }
     .profile-stats strong { font-weight: 600; }
-    /* 备份按钮区域 */
-    .backup-area { display: flex; gap: 0.8rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; flex-wrap: wrap; }
-    .backup-area button { padding: 0.4rem 1.2rem; border-radius: 60px; font-size: 0.8rem; cursor: pointer; flex: 1; }
-    .backup-area .btn-dark { background: #1e1e1e; color: white; border: none; }
-    .backup-area .btn-outline { background: transparent; color: #1e1e1e; border: 1px solid #1e1e1e; }
-    .backup-hint { font-size: 0.7rem; color: #999; margin-top: 0.5rem; text-align: center; }
     @media (max-width: 600px) {
       .app { padding: 1.2rem 1rem 6rem; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -180,13 +174,13 @@
         <button class="profile-edit-btn" id="profileSaveBtn">保存</button>
       </div>
 
-      <!-- ⭐ 数据备份与恢复 -->
-      <div class="backup-area">
-        <button class="btn-dark" id="exportDataBtn">📤 导出备份</button>
-        <button class="btn-outline" id="importDataBtn">📥 导入恢复</button>
+      <!-- ⭐ 数据备份（极小隐藏版） -->
+      <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 0.6rem; opacity: 0.4; border-top: 1px solid #f0f0f0; padding-top: 0.6rem;">
+        <button id="exportDataBtn" style="background: none; border: none; color: #bbb; font-size: 0.7rem; cursor: pointer; padding: 0.1rem 0.3rem;">导出</button>
+        <span style="color: #ddd; font-size: 0.6rem;">|</span>
+        <button id="importDataBtn" style="background: none; border: none; color: #bbb; font-size: 0.7rem; cursor: pointer; padding: 0.1rem 0.3rem;">导入</button>
         <input type="file" id="fileInput" accept=".json" style="display: none;">
       </div>
-      <div class="backup-hint">换设备前请导出备份，数据永久保存在本地</div>
 
       <div class="profile-stats">
         <div><strong id="profileTotal">0</strong> 总专注(h)</div>
