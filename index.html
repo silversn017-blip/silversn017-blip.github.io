@@ -83,6 +83,12 @@
     .profile-stats { display: flex; gap: 2rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; }
     .profile-stats div { font-size: 0.9rem; }
     .profile-stats strong { font-weight: 600; }
+    /* 备份按钮区域 */
+    .backup-area { display: flex; gap: 0.8rem; margin-top: 1.2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; flex-wrap: wrap; }
+    .backup-area button { padding: 0.4rem 1.2rem; border-radius: 60px; font-size: 0.8rem; cursor: pointer; flex: 1; }
+    .backup-area .btn-dark { background: #1e1e1e; color: white; border: none; }
+    .backup-area .btn-outline { background: transparent; color: #1e1e1e; border: 1px solid #1e1e1e; }
+    .backup-hint { font-size: 0.7rem; color: #999; margin-top: 0.5rem; text-align: center; }
     @media (max-width: 600px) {
       .app { padding: 1.2rem 1rem 6rem; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -173,6 +179,15 @@
         </div>
         <button class="profile-edit-btn" id="profileSaveBtn">保存</button>
       </div>
+
+      <!-- ⭐ 数据备份与恢复 -->
+      <div class="backup-area">
+        <button class="btn-dark" id="exportDataBtn">📤 导出备份</button>
+        <button class="btn-outline" id="importDataBtn">📥 导入恢复</button>
+        <input type="file" id="fileInput" accept=".json" style="display: none;">
+      </div>
+      <div class="backup-hint">换设备前请导出备份，数据永久保存在本地</div>
+
       <div class="profile-stats">
         <div><strong id="profileTotal">0</strong> 总专注(h)</div>
         <div><strong id="profileDays">0</strong> 活跃天</div>
@@ -502,6 +517,51 @@
   });
   document.getElementById('profileMini').addEventListener('click', function() {
     switchSection('sectionProfile');
+  });
+
+  // ========== 数据备份与恢复 ==========
+  document.getElementById('exportDataBtn').addEventListener('click', function() {
+    var dataStr = localStorage.getItem('focusMeData');
+    if (!dataStr) { alert('暂无数据可备份'); return; }
+    var blob = new Blob([dataStr], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'focus_backup_' + getToday() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('✅ 备份已下载！请保存好这个文件');
+  });
+
+  document.getElementById('importDataBtn').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+  });
+
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var importedData = JSON.parse(ev.target.result);
+        if (importedData.timerRecords && importedData.tweets) {
+          if (confirm('⚠️ 导入将覆盖当前所有数据，确定继续吗？')) {
+            localStorage.setItem('focusMeData', JSON.stringify(importedData));
+            loadStore();
+            refreshUI();
+            alert('✅ 数据恢复成功！');
+          }
+        } else {
+          alert('❌ 无效的备份文件');
+        }
+      } catch(e) {
+        alert('❌ 文件解析失败，请确认是备份文件');
+      }
+    };
+    reader.readAsText(file);
+    this.value = '';
   });
 
   refreshUI();
